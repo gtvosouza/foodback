@@ -65,10 +65,12 @@ router.get('/', async(req, res) => {
 router.post('/', async(req, res) => {
     try{
         const { exames  } = req.body;
-        
+       
+        await Exame.deleteMany({ sIdEmpresa: exames[0].sIdEmpresa });
+
         for (let i = 0; i < exames.length; i++) {
             const { idFuncionario } = exames[i];
-            console.log(exames[i]);
+
             const funcionario = await Funcionario.findOne({ idSistema: idFuncionario });
             
             if (!!funcionario){

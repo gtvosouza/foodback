@@ -20,21 +20,24 @@ function generateToken(params = {}){
 
 router.post('/register', async(req, res) => {
     try{
-        const { email } = req.body;
+        const { email, sIdEmpresa } = req.body;
 
         if(await User.findOne({ email })) 
             return res.status(400).send({ error: 'User alreadSy exists'});
 
         const user = await User.create(req.body);
+        let token = '';
+
+        if (sIdEmpresa > 0)
+           token = generateToken({ id: user.id, empresa: user.empresa._id })
 
         user.password = undefined;
 
         return res.send({ user,
-                          token: generateToken({ id: user.id, empresa: !!user.empresa != undefined ? user.empresa._id : user.empresa }),   
+                          token,   
                         });
 
     }catch(err) {
-        console.log(err);
         return res.status(400).send({ error: 'Registration failed'});
     }
 });

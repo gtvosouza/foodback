@@ -10,8 +10,8 @@ router.use(authMiddlware);
 
 router.get('/', async(req, res) => {
     
-    try{        
-         
+    try{       
+        
         const { page, funcao, nomeFuncionario } = req.query;
         const skip = (page - 1) * configDB.pageLimit;
         
@@ -39,6 +39,8 @@ router.get('/', async(req, res) => {
 router.post('/', async(req, res) => {
     try{
         const { funcionarios  } = req.body;
+        
+        await Funcionario.deleteMany({ idSistema: funcionarios[0].sIdEmpresa });
 
         for (let i = 0; i < funcionarios.length; i++) {
             const { sIdEmpresa } = funcionarios[i];

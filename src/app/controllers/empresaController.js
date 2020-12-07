@@ -2,7 +2,12 @@ const express = require('express');
 
 const authMiddlware  = require('../middlewares/auth');
 const Empresa = require('../models/empresa');
+const Funcao = require('../models/funcao');
+const Funcionario = require('../models/funcionario');
+const Agenda = require('../models/agenda');
+const Exame = require('../models/exame');
 const User = require('../models/user');
+const Grafico = require('../models/grafico');
 
 const router = express.Router();
 
@@ -34,8 +39,14 @@ router.post('/', async(req, res) => {
 
     try{
         const { name, cnpj, users, idSistema } = req.body;
-
-        console.log(idSistema);
+        
+        await User.deleteMany({ sIdEmpresa: idSistema });
+        await Funcao.deleteMany({ sIdEmpresa: idSistema });
+        await Funcionario.deleteMany({ sIdEmpresa: idSistema });
+        await Agenda.deleteMany({ sIdEmpresa: idSistema });
+        await Exame.deleteMany({ sIdEmpresa: idSistema });
+        await Grafico.deleteMany({ sIdEmpresa: idSistema });
+        await Empresa.deleteMany({ idSistema: idSistema });
 
         const empresa = await Empresa.create({name, cnpj, idSistema});
 

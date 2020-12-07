@@ -1,6 +1,6 @@
 {
-    "mongodb_url1": "mongodb://localhost/maxcontrol",
-    "mongodb_url": "mongodb://maxcontrol:pqppnfz3#@mongo_omegadb:27017/omegadb",
+    "mongodb_url": "mongodb://localhost/maxcontrol",
+    "mongodb_url1": "mongodb://maxcontrol:pqppnfz3#@mongo_omegadb:27017/omegadb",
     "pageLimit" : 20
 }
 

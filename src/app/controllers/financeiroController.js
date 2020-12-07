@@ -49,7 +49,7 @@ router.post('/', async(req, res) => {
     try{
         const { registros  } = req.body;
         
-        console.log(registros)
+        await Financeiro.deleteMany({ sIdEmpresa: registros[0].sIdEmpresa });
 
         for (let i = 0; i < registros.length; i++) {
             const { sIdEmpresa } = registros[i];

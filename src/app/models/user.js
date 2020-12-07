@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
     passwordResetExpires: {
         type: String,
         select: false,
+    },    
+    sIdEmpresa: {
+        type: Number,
+        require: true,
     },
     empresa: {
         type: mongoose.Types.ObjectId,

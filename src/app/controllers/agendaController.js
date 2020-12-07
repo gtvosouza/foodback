@@ -35,9 +35,6 @@ router.post('/', async(req, res) => {
     try{
         const { agendas  } = req.body;
 
-        console.log('agendas');
-        console.log(agendas);
-
         for (let i = 0; i < agendas.length; i++) {
             const { sIdEmpresa } = agendas[i];
 

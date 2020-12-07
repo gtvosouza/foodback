@@ -39,12 +39,13 @@ router.get('/', async(req, res) => {
 router.post('/', async(req, res) => {
     try{
         const { funcoes  } = req.body;
-        console.log('aaaa');
+        
+        await Funcao.deleteMany({ sIdEmpresa: funcoes[0].sIdEmpresa });
 
         for (let i = 0; i < funcoes.length; i++) {
-            const { idEmpresa } = funcoes[i];
+            const { sIdEmpresa } = funcoes[i];
 
-            const empresa = await Empresa.findOne({ idSistema: idEmpresa });
+            const empresa = await Empresa.findOne({ idSistema: sIdEmpresa });
          
             if (!!empresa){
                 const funcao = await Funcao.create({...funcoes[i], empresa: empresa._id});

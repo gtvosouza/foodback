@@ -20,6 +20,10 @@ const FuncaoSchema = new mongoose.Schema({
     percentFuncionarios: {
         type: Number,
     },
+    sIdEmpresa: {
+        type: Number,
+        require: true,
+    },
     empresa: {
         type: mongoose.Types.ObjectId,
         ref: 'Empresa',

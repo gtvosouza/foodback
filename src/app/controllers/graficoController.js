@@ -26,6 +26,7 @@ router.get('/exames', async(req, res) => {
 router.get('/funcionarios', async(req, res) => {
     
     try{
+
         const graficosFuncionario = await Grafico.find({empresa : req.empresaID, tipo : 'F'})
         
         return res.send(graficosFuncionario);
@@ -39,6 +40,8 @@ router.get('/funcionarios', async(req, res) => {
 router.post('/', async(req, res) => {
     try{
         const { registros  } = req.body;
+                
+        await Grafico.deleteMany({ sIdEmpresa: registros[0].sIdEmpresa, tipo: registros[0].tipo});
 
         for (let i = 0; i < registros.length; i++) {
             const { sIdEmpresa } = registros[i];

@@ -30,6 +30,9 @@ const ExameSchema = new mongoose.Schema({
         ref: 'Funcionario',
         require: false
     },
+    sIdEmpresa: {
+        type: Number
+    },
     empresa: {
         type: mongoose.Types.ObjectId,
         ref: 'Empresa',
