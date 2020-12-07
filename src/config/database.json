@@ -1,0 +1,5 @@
+{
+    "mongodb_url": "mongodb://localhost/maxcontrol",
+    "mongodb_url1": "mongodb://gtvosouza:pqppnfz3@mongo_mongo_maxcontrol:27017/mongo_maxcontrol",
+    "pageLimit" : 20
+}
