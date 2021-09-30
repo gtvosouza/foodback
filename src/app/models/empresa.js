@@ -1,5 +1,4 @@
 const mongoose = require('../../database');
-const bcrypt = require('bcryptjs');
 
 const EmpresaSchema = new mongoose.Schema({
     name: {
@@ -9,11 +8,6 @@ const EmpresaSchema = new mongoose.Schema({
     cnpj: {
         type: String,
         require: true,
-    },
-    idSistema: {
-        type: Number,
-        require: true,
-        unique: true,
     },
     users: [{
         type: mongoose.Types.ObjectId,

@@ -6,8 +6,6 @@ const Exames = require('../models/exame');
 const Agenda = require('../models/agenda');
 const Financeiro = require('../models/financeiro');
 const authMiddlware  = require('../middlewares/auth');
-const configDB = require('../../config/database.json');
-const Funcao = require('../models/funcao');
 const Empresa = require('../models/empresa');
 
 router.use(authMiddlware);
@@ -44,12 +42,13 @@ router.get('/', async(req, res) => {
             {
                 total: (await Agenda.countDocuments({empresa : req.empresaID})).toString(),
                 hoje: (await Agenda.countDocuments({empresa : req.empresaID, data: Date.now()})).toString()
-            },
-            financeiro:
-            {
-                valor: financeiro[0].sum,
-                qtde: (await Financeiro.countDocuments({empresa : req.empresaID})).toString()
             }
+            //,
+            //financeiro:
+            //{
+            //    valor: financeiro[0].sum,
+            //    qtde: (await Financeiro.countDocuments({empresa : req.empresaID})).toString()
+           // }
            };
 
         return res.send(result);

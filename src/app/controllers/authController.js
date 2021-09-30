@@ -6,6 +6,7 @@ const mailer = require('../../modules/mailer')
 
 const authConfig = require('../../config/auth.json');
 const User = require('../models/user');
+const Empresa = require('../models/empresa');
 const { Console } = require('console');
 
 const router = express.Router();
@@ -14,7 +15,7 @@ const router = express.Router();
 function generateToken(params = {}){
     
     return token = jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400,        
+        expiresIn: 43200,        
     });
 }
 
@@ -43,9 +44,10 @@ router.post('/register', async(req, res) => {
 });
 
 router.post('/authenticate', async (req, res) =>  {
-    const { email, password } = req.body;
+    const { email, password, idEmpresa } = req.body;
 
     const user = await User.findOne({ email }).select('+password').populate('empresa');
+    let sIdEmpresa = 0;
 
     if (!user)
         return res.status(400).send({ error: 'User not found'});
@@ -53,12 +55,29 @@ router.post('/authenticate', async (req, res) =>  {
     if (!await bcrypt.compare(password, user.password))
         return res.status(400).send({ error: 'Invalid Password'});
 
+    if (user.sIdEmpresa == 0 && !!idEmpresa) {
+        const empresa = await Empresa.findOne({ idSistema: idEmpresa });
+
+        if (!empresa)
+            return res.status(400).send({ error: 'Empresa não encontrada.'});
+            
+        sIdEmpresa = empresa.idEmpresa;
+
+        user.empresa = empresa;
+
+        user.sIdEmpresa = empresa.idSistema;
+        sIdEmpresa = empresa.idSistema;
+    }else 
+        if (!!user.empresa)
+            sIdEmpresa = user.empresa._id;
+
     user.password = undefined;
 
     let token;
 
+
     if (!!user.empresa)
-        token = generateToken({ id: user.id, empresa: user.empresa._id  });
+        token = generateToken({ id: user.id, empresa: sIdEmpresa  });
     else 
         token = generateToken({ id: user.id  });
         

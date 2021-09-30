@@ -4,7 +4,6 @@ const router = express.Router();
 const Funcionario = require('../models/funcionario');
 const Empresa = require('../models/empresa');
 const authMiddlware  = require('../middlewares/auth');
-const configDB = require('../../config/database.json');
 
 router.use(authMiddlware);
 
@@ -13,19 +12,19 @@ router.get('/', async(req, res) => {
     try{       
         
         const { page, funcao, nomeFuncionario } = req.query;
-        const skip = (page - 1) * configDB.pageLimit;
+        const skip = (page - 1) * 10;
         
         const count = await  Funcionario.countDocuments({empresa : req.empresaID,  funcao :  !!funcao ? new RegExp(funcao, 'i') :new RegExp(' '),   name :  !!nomeFuncionario ? new RegExp(nomeFuncionario, 'i') :new RegExp(' ') });
         
         let result = {
             funcionarios:  await Funcionario.find({empresa : req.empresaID,  funcao :  !!funcao ? new RegExp(funcao, 'i') :new RegExp(' '), name :  !!nomeFuncionario ? new RegExp(nomeFuncionario, 'i') :new RegExp(' ')  }) 
-                                            .limit(configDB.pageLimit)
+                                            .limit(10)
                                             .skip(skip)
                                             .sort(
                                             { 
                                                 dtDemissao : 1
                                             }),
-            pages: Math.ceil(count / configDB.pageLimit)
+            pages: Math.ceil(count / 10)
         };
 
         return res.send(result);
@@ -36,6 +35,19 @@ router.get('/', async(req, res) => {
     }
 });
 
+
+router.get('/ativos', async(req, res) => {
+    
+    try{       
+        const funcionarios =  await Funcionario.find({empresa : req.empresaID, dtDemissao : null });
+        
+        return res.send(funcionarios);
+       
+    }catch (error){
+        console.log(error)
+        return res.status(400).send({ error: 'Erro ao listar Funcionários Ativos'});
+    }
+});
 router.post('/', async(req, res) => {
     try{
         const { funcionarios  } = req.body;

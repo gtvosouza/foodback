@@ -1,13 +1,31 @@
+require('dotenv/config');
+
 const mongoose = require('mongoose');
 
-const configMongo = require('../config/database.json');
+const {
+        MONGO_USERNAME,
+        MONGO_PASSWORD,
+        MONGO_HOSTNAME,
+        MONGO_PORT,
+        MONGO_DB
+} = process.env;
+    
+const options = {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+};
+
+const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`; 
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(configMongo.mongodb_url, { useCreateIndex: true,
-                                            useNewUrlParser: true,
-                                            useUnifiedTopology: true})
-        .then(() => { console.log('mongoDB is connected...')  })
-        .catch((err) => {throw err});
+mongoose.connect(url, options).then( function() {
+        console.log('MongoDB is connected');
+      })
+        .catch( function(err) {
+        console.log(err);
+      });
+      
 
 module.exports = mongoose;

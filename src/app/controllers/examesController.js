@@ -8,7 +8,6 @@ const authConfig = require('../../config/auth.json');
 
 const Exame = require('../models/exame');
 const Funcionario = require('../models/funcionario');
-const configDB = require('../../config/database.json');
 const authMiddlware  = require('../middlewares/auth');
 
 const router = express.Router();
@@ -19,7 +18,7 @@ router.get('/', async(req, res) => {
     
     try{ 
         const { page, nomeExame, startDate } = req.query;
-        const skip = (page - 1) * configDB.pageLimit;
+        const skip = (page - 1) * 10;
 
         let count = 0;
 
@@ -39,9 +38,9 @@ router.get('/', async(req, res) => {
                                       proximoExame : { $gte : primeiroDia }, $and : [ { proximoExame : { $lte : ultimoDia } }],
                                       nomeExame :  !!nomeExame ? new RegExp(nomeExame, 'i') :new RegExp(' ') })
                                .populate('funcionario')
-                               .limit(configDB.pageLimit)
+                               .limit(10)
                                .skip(skip),
-            pages: Math.ceil(count / configDB.pageLimit)
+            pages: Math.ceil(count / 10)
          };
 
         }else {
@@ -50,7 +49,7 @@ router.get('/', async(req, res) => {
             result = {
                 exames: await Exame.find({empresa : req.empresaID,
                                           nomeExame :  !!nomeExame ? new RegExp(nomeExame, 'i') :new RegExp(' ')}).populate('funcionario').limit(configDB.pageLimit).skip(skip),
-                pages: Math.ceil(count / configDB.pageLimit)
+                pages: Math.ceil(count / 10)
             };
         }
 
@@ -66,6 +65,8 @@ router.post('/', async(req, res) => {
     try{
         const { exames  } = req.body;
        
+        console.log('aaaaa')
+
         await Exame.deleteMany({ sIdEmpresa: exames[0].sIdEmpresa });
 
         for (let i = 0; i < exames.length; i++) {

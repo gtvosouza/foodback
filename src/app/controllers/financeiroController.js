@@ -2,7 +2,6 @@ const express = require('express');
 
 const Financeiro = require('../models/financeiro');
 const Empresa = require('../models/empresa');
-const configDB = require('../../config/database.json');
 const authMiddlware  = require('../middlewares/auth');
 
 const router = express.Router();
@@ -12,13 +11,13 @@ router.use(authMiddlware);
 router.get('/', async(req, res) => {
     try{        
         const { page, limit } = req.query;
-        const skip = (page - 1) * configDB.pageLimit;
+        const skip = (page - 1) * 10;
         
         const count = await  Financeiro.countDocuments({empresa : req.empresaID});
         
         let result = {
                         registros: await Financeiro.find({empresa : req.empresaID}).limit(5).sort({vencimento : -1}) ,
-                        pages: Math.ceil(count / configDB.pageLimit)
+                        pages: Math.ceil(count / 10)
                      };
 
         return res.send(result);

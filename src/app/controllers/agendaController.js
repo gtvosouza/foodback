@@ -2,24 +2,22 @@ const express = require('express');
 
 const Agenda = require('../models/agenda');
 const Empresa = require('../models/empresa');
-const configDB = require('../../config/database.json');
 const authMiddlware  = require('../middlewares/auth');
 
 const router = express.Router();
-
 
 router.use(authMiddlware);
 
 router.get('/', async(req, res) => {
     try{        
         const { page, limit } = req.query;
-        const skip = (page - 1) * configDB.pageLimit;
+        const skip = (page - 1) * 10;
         
         const count = await  Agenda.countDocuments({empresa : req.empresaID});
         
         let result = {
-            agendas:  !!limit ? await Agenda.find({empresa : req.empresaID}).limit(5) : await Agenda.find({empresa : req.empresaID}).limit(configDB.pageLimit).skip(skip),
-                        pages: Math.ceil(count / configDB.pageLimit)
+            agendas:  !!limit ? await Agenda.find({empresa : req.empresaID}).limit(5) : await Agenda.find({empresa : req.empresaID}).limit(10).skip(skip),
+                        pages: Math.ceil(count / 10)
                      };
 
         return res.send(result);
