@@ -20,17 +20,20 @@ const AgendaSchema = new mongoose.Schema({
     },
     sIdEmpresa: {
         type: Number,
-        require: true,
+        require: false,
+    },
+    sIdFuncionario: {
+        type: Number,
+        require: false,
     },
     tipoExame: {
         type: String,
         require: true,
     },
-    empresa: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Empresa',
-        require: false
-    },
+    divisao: [{
+        controle: String,
+        dados:[{descricao: String}],
+    }],
     createdAt:{
         type: Date,
         default: Date.now

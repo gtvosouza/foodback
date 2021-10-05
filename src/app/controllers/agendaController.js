@@ -1,7 +1,6 @@
 const express = require('express');
 
 const Agenda = require('../models/agenda');
-const Empresa = require('../models/empresa');
 const authMiddlware  = require('../middlewares/auth');
 
 const router = express.Router();
@@ -9,19 +8,8 @@ const router = express.Router();
 router.use(authMiddlware);
 
 router.get('/', async(req, res) => {
-    try{        
-        const { page, limit } = req.query;
-        const skip = (page - 1) * 10;
-        
-        const count = await  Agenda.countDocuments({empresa : req.empresaID});
-        
-        let result = {
-            agendas:  !!limit ? await Agenda.find({empresa : req.empresaID}).limit(5) : await Agenda.find({empresa : req.empresaID}).limit(10).skip(skip),
-                        pages: Math.ceil(count / 10)
-                     };
-
-        return res.send(result);
-       
+    try{                
+        return res.send(await Agenda.find());       
     }catch (error){
         console.log(error)
         return res.status(400).send({ error: 'Erro ao listar registros'});
@@ -34,15 +22,9 @@ router.post('/', async(req, res) => {
         const { agendas  } = req.body;
 
         for (let i = 0; i < agendas.length; i++) {
-            const { sIdEmpresa } = agendas[i];
+            const agenda = await Agenda.create({...agendas[i]});
 
-            const empresa = await Empresa.findOne({ idSistema: sIdEmpresa });
-         
-            if (!!empresa){
-                const agenda = await Agenda.create({...agendas[i], empresa: empresa._id});
-
-                await agenda.save();                       
-            }
+            await agenda.save();     
         }
 
         return res.send({});

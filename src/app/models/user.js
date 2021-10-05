@@ -2,9 +2,37 @@ const mongoose = require('../../database');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
         require: true,
+    },
+    lastName: {
+        type: String,
+        require: true,
+    },
+    phone: {
+        type: String,
+        require: false,
+    },    
+    state: {
+        type: String,
+        require: false,
+    },
+    role: {
+        type: String,
+        require: false,
+    },    
+    avatar: {
+        type: String,
+        require: false,
+    },
+    bio: {
+        type: String,
+        require: false,
+    },
+    country: {
+        type: String,
+        require: false,
     },
     email: {
         type: String,
@@ -16,23 +44,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         select: false,
-    },
-    passwordResetToken: {
-        type: String,
-        select: false,
-    },
-    passwordResetExpires: {
-        type: String,
-        select: false,
-    },    
-    sIdEmpresa: {
-        type: Number,
-        require: true,
-    },
-    empresa: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Empresa',
-        require: false
     },
     createdAt:{
         type: Date,
