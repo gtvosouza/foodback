@@ -2,16 +2,13 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const mailer = require('../../modules/mailer')
 
 const authConfig = require('../../config/auth.json');
-const User = require('../models/user');
-const { Console } = require('console');
+const User = require('../models/usuario');
 
 const router = express.Router();
 
 function generateToken(params = {}){
-    
     return token = jwt.sign(params, authConfig.secret, {
         expiresIn: 43200,        
     });
@@ -20,7 +17,7 @@ function generateToken(params = {}){
 router.post('/register', async(req, res) => {
     try{
         const { email } = req.body;
-
+  
         if(await User.findOne({ email })) 
             return res.status(400).send({ error: 'User already exists'});
 
@@ -39,20 +36,20 @@ router.post('/register', async(req, res) => {
 });
 
 router.post('/authenticate', async (req, res) =>  {
-    const { email, password, idEmpresa } = req.body;
-
-    const user = await User.findOne({ email }).select('+password');
+    const { email, password } = req.body;
+  
+    const user = await User.findOne({ email }).select('+senha');
     
     if (!user)
-        return res.status(400).send({ error: 'User not found'});
+        return res.status(400).send({ error: 'Usuário não encontrado'});
 
-    if (!await bcrypt.compare(password, user.password))
-        return res.status(400).send({ error: 'Invalid Password'});
+    if (!await bcrypt.compare(password, user.senha))
+        return res.status(400).send({ error: 'Senha inválida'});
 
-    user.password = undefined;
+    user.senha = undefined;
 
-    const accessToken = generateToken({ id: user.id  });
-  
+    const accessToken = generateToken({ id: user._id  });
+    
     res.send({ user, 
         accessToken,
              });

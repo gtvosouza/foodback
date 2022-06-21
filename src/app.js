@@ -4,7 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const  swaggerDocument  = require('./swaggerDocument');
+const swaggerDocument  = require('./swaggerDocument');
+const mongoose = require('./database');
 
 const app = express();
 
@@ -20,4 +21,6 @@ app.get('/', (req, res) => {
 
 require('./app/controllers/index')(app);
 
-app.listen(process.env.PORT || 3333);
+console.log(process.env.PORT);
+
+app.listen(process.env.PORT || 3334);

@@ -16,7 +16,12 @@ const options = {
         useUnifiedTopology: true
 };
 
-const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`; 
+//const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}/?authSource=admin`; 
+
+
+const url = `mongodb+srv://doadmin:M2cj6m4R180lYA37@foodback-mongodb-307866dd.mongo.ondigitalocean.com/admin?authMechanism=DEFAULT`; 
+
+//const url = `mongodb://localhost/db_teste`; 
 
 mongoose.Promise = global.Promise;
 
